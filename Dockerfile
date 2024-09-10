@@ -14,10 +14,11 @@ RUN curl -L https://download.opensuse.org/distribution/leap-micro/6.0/appliances
 
 FROM opensuse/tumbleweed:latest AS final
 
+COPY --chown=root:root --chmod=777 run.sh /run.sh
 COPY --from=base /leap.iso /leap.iso
 COPY --from=base /leap /leap
 COPY --from=base /xorriso /usr/local
 
 RUN mkdir /data
 
-ENTRYPOINT [ "/bin/bash" ]
+ENTRYPOINT [ "/run.sh" ]
