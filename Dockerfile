@@ -21,4 +21,4 @@ COPY --from=base /xorriso /usr/local
 
 RUN zypper install --no-confirm jq git
 
-ENTRYPOINT [ "/bin/bash" ]
+ENTRYPOINT [ "/bin/bash", "-l", "-c" ]
