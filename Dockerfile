@@ -19,6 +19,6 @@ COPY --from=base /leap.iso /leap.iso
 COPY --from=base /leap /leap
 COPY --from=base /xorriso /usr/local
 
-RUN mkdir /data
+RUN zypper install --no-confirm jq git
 
-ENTRYPOINT [ "/run.sh" ]
+ENTRYPOINT [ "/bin/bash" ]
