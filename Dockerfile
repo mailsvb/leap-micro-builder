@@ -19,6 +19,6 @@ COPY --from=base /leap.iso /leap.iso
 COPY --from=base /leap /leap
 COPY --from=base /xorriso /usr/local
 
-RUN zypper install --no-confirm jq git
+RUN zypper install --no-confirm jq git docker
 
 ENTRYPOINT [ "/bin/bash", "-l", "-c" ]
