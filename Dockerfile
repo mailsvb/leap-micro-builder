@@ -12,11 +12,17 @@ RUN curl -L https://download.opensuse.org/distribution/leap-micro/6.0/appliances
     mkdir -p /leap && \
     /xorriso/bin/osirrox -indev /leap.iso -extract / /leap
 
+RUN curl -L https://download.opensuse.org/distribution/leap-micro/6.0/product/iso/openSUSE-Leap-Micro-6.0-x86_64.iso -o /packages.iso && \
+    mkdir -p /packages && \
+    /xorriso/bin/osirrox -indev /packages.iso -extract / /packages
+
 FROM opensuse/tumbleweed:latest AS final
 
 COPY --chown=root:root --chmod=777 run.sh /run.sh
 COPY --from=base /leap.iso /leap.iso
 COPY --from=base /leap /leap
+COPY --from=base /packages/noarch/*.rpm /leap/packages/
+COPY --from=base /packages/x86_64/*.rpm /leap/packages/
 COPY --from=base /xorriso /usr/local
 
 RUN zypper install --no-confirm jq git
