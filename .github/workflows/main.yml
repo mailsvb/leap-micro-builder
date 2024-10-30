@@ -5,6 +5,12 @@ name: publish
 
 on:
   workflow_dispatch:
+    inputs:
+      release:
+        type: string
+        required: true
+        description: 'release version of the builder package'
+        default: '0'
 
 jobs:
   push_to_registry:
@@ -28,8 +34,5 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          build-args: |
-            JENKINS_VERSION=${{ vars.JENKINS_VERSION }}
-            NODE_MAJOR=${{ vars.NODE_MAJOR }}
           push: true
-          tags: mailsvb/isobuilder:latest
+          tags: mailsvb/isobuilder:r${{ github.event.inputs.release }}
