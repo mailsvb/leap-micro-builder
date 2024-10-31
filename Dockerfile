@@ -1,4 +1,4 @@
-ARG iso_type
+ARG iso_type=core
 
 FROM opensuse/tumbleweed:latest AS base
 
