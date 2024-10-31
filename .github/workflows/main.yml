@@ -11,6 +11,12 @@ on:
         required: true
         description: 'release version of the builder package'
         default: '0'
+      iso_type:
+        type: choice
+        description: Choose type of ISO image
+        options:
+        - core
+        - full
 
 jobs:
   push_to_registry:
@@ -35,4 +41,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: mailsvb/isobuilder:r${{ github.event.inputs.release }}
+          build-args: |
+            iso_type=${{ github.event.inputs.iso_type }}
+          tags: mailsvb/isobuilder:${{ github.event.inputs.iso_type }}-r${{ github.event.inputs.release }}
