@@ -1,3 +1,5 @@
+ARG iso_type
+
 FROM opensuse/tumbleweed:latest AS base
 
 RUN zypper install --no-confirm gcc make awk && \
@@ -16,7 +18,14 @@ RUN curl -L https://download.opensuse.org/distribution/leap-micro/6.0/product/is
     mkdir -p /packages && \
     /xorriso/bin/osirrox -indev /packages.iso -extract / /packages
 
-FROM opensuse/tumbleweed:latest AS final
+FROM opensuse/tumbleweed:latest AS final-core
+
+COPY --chown=root:root --chmod=777 run.sh /run.sh
+COPY --from=base /leap.iso /leap.iso
+COPY --from=base /leap /leap
+COPY --from=base /xorriso /usr/local
+
+FROM opensuse/tumbleweed:latest AS final-full
 
 COPY --chown=root:root --chmod=777 run.sh /run.sh
 COPY --from=base /leap.iso /leap.iso
@@ -24,6 +33,8 @@ COPY --from=base /leap /leap
 COPY --from=base /packages/noarch/*.rpm /leap/packages/
 COPY --from=base /packages/x86_64/*.rpm /leap/packages/
 COPY --from=base /xorriso /usr/local
+
+FROM final-${iso_type} AS final
 
 RUN zypper install --no-confirm jq git
 
